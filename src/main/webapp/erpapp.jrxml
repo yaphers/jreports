@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="erpapp" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="dd09c3bc-d08c-498e-b821-1aca882b74d6">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT  dbo."PRODUCT_CATALOG"."ID", dbo."PRODUCT_CATALOG"."NAME", dbo."PRODUCT_CATALOG"."PRODUCT_SKU" FROM dbo."PRODUCT_CATALOG"]]>
+	</queryString>
+	<field name="ID" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.label" value="ID"/>
+	</field>
+	<field name="NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NAME"/>
+	</field>
+	<field name="PRODUCT_SKU" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="PRODUCT_SKU"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="200" y="20" width="180" height="30" uuid="e7fc40be-32ee-4c94-a9f3-3b543f646d89"/>
+				<text><![CDATA[ERPAPP Reporte de Productos]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="290" y="45" width="100" height="30" uuid="98eb4c94-2675-4d49-b3d5-535f5695278b"/>
+				<textFieldExpression><![CDATA[$F{PRODUCT_SKU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="45" width="100" height="30" uuid="0099c3b8-1eb0-4df2-9e30-2e06585b2f4e"/>
+				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="" x="30" y="45" width="100" height="30" uuid="eb8d8aa3-ffec-4753-9949-18f61a30faf3"/>
+				<textFieldExpression><![CDATA[$F{ID}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
