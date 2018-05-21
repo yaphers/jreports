@@ -4,13 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.HashMap;
 
-import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.zul.ListModelList;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
-import net.sf.jasperreports.engine.JRException;
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Init;
+import org.zkoss.util.media.AMedia;
+import org.zkoss.zul.Iframe;
+
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -19,36 +23,26 @@ import net.sf.jasperreports.engine.JasperReport;
 
 public class MyViewModel {
 	
-	ReportType reportType = null;
-	private ReportConfig reportConfig = null;
-		
-	private ListModelList<ReportType> reportTypesModel = new ListModelList<ReportType>(
-			Arrays.asList(
-					new ReportType("PDF", "pdf"), 
-					new ReportType("HTML", "html"), 
-					new ReportType("Word (RTF)", "rtf"), 
-					new ReportType("Excel", "xls"), 
-					new ReportType("Excel (JXL)", "jxl"), 
-					new ReportType("CSV", "csv"), 
-					new ReportType("OpenOffice (ODT)", "odt")));
-
-
-	@Command("showReport")
-	@NotifyChange("reportConfig")
-	public void showReport() throws SQLException, IOException {
-		reportConfig = new ReportConfig();
-		reportConfig.setType(reportType);
-		
-		reportConfig.setOutput(File.createTempFile("output", ".pdf"));
-		
-		Connection conn = reportConfig.getDataConnection();
-		try {			
-			JasperReport jasperReport = JasperCompileManager.compileReport(reportConfig.getSourceXML());
-			JasperPrint nRet = JasperFillManager.fillReport(jasperReport, reportConfig.getParameters(), conn);
+	@Init
+	public void init(@BindingParam("frame") Iframe frame) throws IOException {
+		File f =  File.createTempFile("output", ".pdf");		
+		Context ctx = null;
+		Connection conn = null;
+		try {
+			ctx = new InitialContext();
+			DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/ERPAppPool");			
+			conn = ds.getConnection();
 			
-			JasperExportManager.exportReportToPdfFile(nRet, reportConfig.getOutput().getAbsolutePath());
-		    
-		} catch(JRException e) {
+			JasperReport jasperReport = JasperCompileManager.compileReport("c:\\Java\\workspace\\jreports\\src\\main\\webapp\\erpapp.jrxml");
+			JasperPrint nRet = JasperFillManager.fillReport(jasperReport, new HashMap<String, Object>(), conn);			
+			JasperExportManager.exportReportToPdfFile(nRet, f.getAbsolutePath());
+			
+			File f2 = new File("C:\\Java\\sample.pdf");
+			AMedia m = new AMedia("output", "pdf", "application/pdf", f2, true);			
+
+			frame.setContent(m);	
+			
+		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
@@ -60,22 +54,7 @@ public class MyViewModel {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	public ListModelList<ReportType> getReportTypesModel() {
-		return reportTypesModel;
-	}
-
-	public ReportConfig getReportConfig() {
-		return reportConfig;
-	}
-	
-	public ReportType getReportType() {
-		return reportType;
-	}
-
-	public void setReportType(ReportType reportType) {
-		this.reportType = reportType;
+		
 	}
 	
 }

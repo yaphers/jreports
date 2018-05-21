@@ -1,14 +1,3 @@
-<div apply="org.zkoss.bind.BindComposer" 
-	viewModel="@id('vm') @init('local.dev.jreports.MyViewModel')">
-	Choose a File Type : <listbox id="format" mold="select" model="@load(vm.reportTypesModel)" 
-							selectedItem="@bind(vm.reportType)">
-		<template name="model">
-			<listitem value="@load(each)" label="@load(each.label)"></listitem>
-		</template>
-	</listbox>
-
-	<button label="Get Report" onClick="@command('showReport')" />
-
-	<a href="@load(vm.reportConfig.output.absolutePath, after='showReport')" target="_blank">PDF</a>
-
+<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('local.dev.jreports.MyViewModel', frame=previewFrame)">	
+	<iframe id="previewFrame" height="100vh" width="100%" autohide="true"></iframe>
 </div>
