@@ -37,8 +37,7 @@ public class MyViewModel {
 			JasperPrint nRet = JasperFillManager.fillReport(jasperReport, new HashMap<String, Object>(), conn);			
 			JasperExportManager.exportReportToPdfFile(nRet, f.getAbsolutePath());
 			
-			File f2 = new File("C:\\Java\\sample.pdf");
-			AMedia m = new AMedia("output", "pdf", "application/pdf", f2, true);			
+			AMedia m = new AMedia("output", "pdf", "application/pdf", f, true);			
 
 			frame.setContent(m);	
 			
